@@ -1,26 +1,67 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFilmeDto } from './dto/create-filme.dto';
-import { UpdateFilmeDto } from './dto/update-filme.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { apiFilms } from 'src/service/apiFilms';
+import { fiels } from 'src/utils/fields-to-feching';
+import { Repository } from 'typeorm';
+import { FilmsByApiFechingDto } from './dto/films-by-api-feching.dto';
+import { Films } from './entities/filme.entity';
+import * as uuid from 'uuid';
 
 @Injectable()
 export class FilmesService {
-  create(createFilmeDto: CreateFilmeDto) {
-    return 'This action adds a new filme';
+  constructor(@InjectRepository(Films) private repository: Repository<Films>) {}
+
+  async create() {
+    const films: FilmsByApiFechingDto[] = await this.fechingOnApi();
+    const NotSavedFilm = await this.findByIdRef(films);
+
+    if (!NotSavedFilm[0]) {
+      throw new BadRequestException('no new data to insert');
+    }
+
+    const filmsSaved = NotSavedFilm.map((film) => {
+      return this.repository.create({
+        id: uuid.v4(),
+        idRef: film.id,
+        title: film.title,
+        image: film.image,
+        director: film.director,
+        descricao: film.description,
+        producer: film.producer,
+        releaseDate: film.release_date,
+        rtScore: parseInt(film.rt_score),
+      });
+    });
+
+    await this.repository.save(filmsSaved);
   }
 
   findAll() {
     return `This action returns all filmes`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} filme`;
+  async findByIdRef(films: FilmsByApiFechingDto[]) {
+    const response = [];
+    for (let i = 0; i < films.length; i++) {
+      const isExist = await this.repository.findOne({
+        where: { idRef: films[i].id },
+      });
+      if (!isExist) {
+        response.push(films[i]);
+      }
+    }
+
+    return response;
   }
 
-  update(id: number, updateFilmeDto: UpdateFilmeDto) {
-    return `This action updates a #${id} filme`;
-  }
+  private async fechingOnApi(): Promise<FilmsByApiFechingDto[]> {
+    const apiResponse = await apiFilms
+      .get(`films?fields=${fiels}`)
+      .then((response) => response.data)
+      .catch(() => {
+        throw new BadRequestException('Api films is not work');
+      });
 
-  remove(id: number) {
-    return `This action removes a #${id} filme`;
+    return apiResponse;
   }
 }
