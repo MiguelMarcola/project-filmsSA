@@ -13,10 +13,12 @@ import { FilmesModule } from './modules/filmes/filmes.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
-      entities: [],
+      entities: [__dirname + '/modules/**/*.entity{.ts,.js}'],
+      autoLoadEntities: true,
       ssl: false,
       synchronize: true,
     }),
+
     FilmesModule,
   ],
   controllers: [],
