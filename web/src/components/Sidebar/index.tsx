@@ -9,6 +9,7 @@ import {
     Clock
 } from "phosphor-react";
 import Logo from "../../assets/images/FilmsSA.png"
+import { UpdateDatabaseButton } from "../UpdateDatabaseButton";
 
 export function Sidebar() {
     return (
@@ -17,35 +18,37 @@ export function Sidebar() {
 
             <div className="w-full h-[1px] bg-gray-300 opacity-40"></div>
 
-            <Link to="/">
-                <FilmSlate size={32} color="#FFFFFF" />
+            <Link to="/" className="text-white hover:text-blue-500 transition-all">
+                <FilmSlate size={32} />
             </Link>
 
-            <Link to="/">
-                <Television size={32} color="#FFFFFF" />
+            <Link to="/" className="text-white hover:text-blue-500 transition-all">
+                <Television size={32} />
             </Link>
 
-            <Link to="/">
-                <GameController size={32} color="#FFFFFF" />
+            <Link to="/" className="text-white hover:text-blue-500 transition-all">
+                <GameController size={32} />
             </Link>
 
-            <Link to="/">
-                <Newspaper size={32} color="#FFFFFF" />
+            <Link to="/" className="text-white hover:text-blue-500 transition-all">
+                <Newspaper size={32} />
             </Link>
 
-            <Link to="/">
-                <Trophy size={32} color="#FFFFFF" />
+            <Link to="/" className="text-white hover:text-blue-500 transition-all">
+                <Trophy size={32} />
             </Link>
 
             <div className="w-full h-[1px] bg-gray-300 opacity-40"></div>
 
-            <Link to="/filmes">
-                <Heart size={32} weight="fill" color="#FFFFFF" />
+            <Link to="/filmes" className="text-white hover:text-blue-500 transition-all">
+                <Heart size={32} weight="fill" />
             </Link>
 
-            <Link to="/filmes">
-                <Clock size={32} color="#FFFFFF" />
+            <Link to="/filmes" className="text-white hover:text-blue-500 transition-all">
+                <Clock size={32} />
             </Link>
+
+            <UpdateDatabaseButton />
         </div>
     )
 }
