@@ -12,7 +12,7 @@ import Logo from "../../assets/images/FilmsSA.png"
 
 export function Sidebar() {
     return (
-        <div className="bg-zinc-900 h-full w-28 fixed left-0 flex flex-col border-x-[1px] border-x-zinc-600 items-center gap-8 px-4 py-8">
+        <div className="bg-zinc-900 h-full w-28 fixed left-0 top-0 flex flex-col border-x-[1px] border-x-zinc-600 items-center gap-8 px-4 py-8">
             <img src={Logo} />
 
             <div className="w-full h-[1px] bg-gray-300 opacity-40"></div>
