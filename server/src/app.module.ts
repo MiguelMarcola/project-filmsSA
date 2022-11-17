@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FilmesModule } from './modules/filmes/filmes.module';
+import { FilmsModule } from './modules/films/films.module';
 
 @Module({
   imports: [
@@ -13,11 +13,13 @@ import { FilmesModule } from './modules/filmes/filmes.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
-      entities: [],
+      entities: [__dirname + '/modules/**/*.entity{.ts,.js}'],
+      autoLoadEntities: true,
       ssl: false,
       synchronize: true,
     }),
-    FilmesModule,
+
+    FilmsModule,
   ],
   controllers: [],
   providers: [],
