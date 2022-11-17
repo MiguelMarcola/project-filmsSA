@@ -1,9 +1,5 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { skip } from 'rxjs';
-import { FilmsByApiFechingDto } from './dto/films-by-api-feching.dto';
-import { FindFilmsDto } from './dto/find-films.dto';
-import { Films } from './entities/film.entity';
 import { FilmsService } from './films.service';
 
 @Controller('api/v1/films')
@@ -58,7 +54,12 @@ export class FilmsController {
       ],
     },
   })
-  findAll(@Query('skip') findFilmsDto: FindFilmsDto) {
-    return this.filmsService.findAll(findFilmsDto);
+  findAll(@Query('skip') skip?: number) {
+    return this.filmsService.findAll(skip);
+  }
+
+  @Get('/top-score')
+  findTopScore() {
+    return this.filmsService.findTopScore();
   }
 }
