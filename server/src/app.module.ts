@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FilmesModule } from './modules/filmes/filmes.module';
+import { FilmsModule } from './modules/films/films.module';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { FilmesModule } from './modules/filmes/filmes.module';
       synchronize: true,
     }),
 
-    FilmesModule,
+    FilmsModule,
   ],
   controllers: [],
   providers: [],
