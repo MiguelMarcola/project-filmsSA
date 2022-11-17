@@ -1,36 +1,31 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
-import {
-  ApiOkResponse,
-  ApiResponse,
-  ApiTags,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { skip } from 'rxjs';
 import { FilmsByApiFechingDto } from './dto/films-by-api-feching.dto';
 import { FindFilmsDto } from './dto/find-films.dto';
-import { Films } from './entities/filme.entity';
-import { FilmesService } from './filmes.service';
+import { Films } from './entities/film.entity';
+import { FilmsService } from './films.service';
 
-@Controller('api/v1/filmes')
+@Controller('api/v1/films')
 @ApiTags('Films')
-export class FilmesController {
-  constructor(private readonly filmesService: FilmesService) {}
+export class FilmsController {
+  constructor(private readonly filmsService: FilmsService) {}
 
   @Post()
   @ApiResponse({
     status: 201,
-    description: 'created',
+    description: 'Created',
   })
   @ApiResponse({
     status: 400,
-    description: 'no new data to insert',
+    description: 'No new data to insert',
   })
   @ApiResponse({
     status: 503,
     description: 'Api films is not work',
   })
   create() {
-    return this.filmesService.create();
+    return this.filmsService.create();
   }
 
   @Get()
@@ -57,13 +52,13 @@ export class FilmesController {
                 },
               ],
             },
-            count: { type: 'number' },
+            count: { type: 'number', example: 1 },
           },
         },
       ],
     },
   })
   findAll(@Query('skip') findFilmsDto: FindFilmsDto) {
-    return this.filmesService.findAll(findFilmsDto);
+    return this.filmsService.findAll(findFilmsDto);
   }
 }
