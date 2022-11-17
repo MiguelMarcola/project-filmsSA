@@ -40,7 +40,7 @@ export class FilmsService {
     await this.repository.save(filmsSaved);
   }
 
-  async findAll({ skip = 0 }) {
+  async findAll(skip = 0) {
     const take = 10;
     const [result, total] = await this.repository.findAndCount({
       order: { id: 'DESC' },
@@ -52,6 +52,18 @@ export class FilmsService {
       data: result,
       count: total,
     };
+  }
+
+  async findTopScore() {
+    const skip = 0;
+    const take = 3;
+    const [result] = await this.repository.findAndCount({
+      order: { rtScore: 'DESC' },
+      take,
+      skip,
+    });
+
+    return result;
   }
 
   async findByIdRef(films: FilmsByApiFechingDto[]) {
