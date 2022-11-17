@@ -13,7 +13,7 @@ import { UpdateDatabaseButton } from "../UpdateDatabaseButton";
 
 export function Sidebar() {
     return (
-        <div className="bg-zinc-900 h-full w-28 fixed left-0 top-0 flex flex-col border-x-[1px] border-x-zinc-600 items-center gap-8 px-4 py-8">
+        <div className="bg-zinc-900 h-screen fixed left-0 top-0 w-28 flex flex-col border-x-[1px] invisible md:visible border-x-zinc-600 items-center gap-8 px-4 py-8 overflow-y-scroll scrollbar-none">
             <img src={Logo} />
 
             <div className="w-full h-[1px] bg-gray-300 opacity-40"></div>

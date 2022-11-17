@@ -1,17 +1,32 @@
 import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast";
+import { api } from "../../service";
 import { Loading } from "../Loading";
+import { AxiosError } from 'axios';
+import { ErrorProps } from "../../interfaces/ErrorProps";
 
 export function UpdateDatabaseButton() {
     const [isLoading, setIsLoading] = useState(false)
 
     const mockLoadign = async () => {
         setIsLoading(true);
-        await setInterval(() => {
-            setIsLoading(false);
-        }, 2000)
-        toast.success('Filmes Atualizados com sucesso!')
-        toast.error("Ocorreu um problema ao atualizar!")
+        await api.post("/films")
+            .then(() => {
+                toast.success('Filmes Atualizados com sucesso!')
+                setIsLoading(false);
+                setInterval(() => {
+                    window.location.reload();
+                }, 2500)
+            })
+            .catch((error: AxiosError) => {
+                const data = error.response?.data as ErrorProps
+                if (data.statusCode === 400 && data.message === "no new data to insert") {
+                    toast.error("Os dados ja se encontram atualizados!")
+                } else {
+                    toast.error("Ouve um problema ao atualizar!")
+                }
+                setIsLoading(false);
+            })
     }
 
     return (
