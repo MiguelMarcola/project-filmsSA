@@ -4,15 +4,15 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { apiFilms } from 'src/service/apiFilms';
-import { fiels } from 'src/utils/fields-to-feching';
+import axios from 'axios';
+import { fiels } from '../../utils/fields-to-feching';
 import { Repository } from 'typeorm';
 import { FilmsByApiFechingDto } from './dto/films-by-api-feching.dto';
-import { Films } from './entities/filme.entity';
+import { Films } from './entities/film.entity';
 import * as uuid from 'uuid';
 
 @Injectable()
-export class FilmesService {
+export class FilmsService {
   constructor(@InjectRepository(Films) private repository: Repository<Films>) {}
 
   async create() {
@@ -68,9 +68,9 @@ export class FilmesService {
     return response;
   }
 
-  private async fechingOnApi(): Promise<FilmsByApiFechingDto[]> {
-    const apiResponse = await apiFilms
-      .get(`films?fields=${fiels}&limit=50`)
+  async fechingOnApi(): Promise<FilmsByApiFechingDto[]> {
+    const apiResponse = await axios
+      .get(`https://ghibliapi.herokuapp.com/films?fields=${fiels}&limit=50`)
       .then((response) => response.data)
       .catch(() => {
         throw new ServiceUnavailableException('Api films is not work');
