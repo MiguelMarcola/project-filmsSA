@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { apiFilms } from 'src/service/apiFilms';
 import { fiels } from 'src/utils/fields-to-feching';
@@ -36,8 +40,18 @@ export class FilmesService {
     await this.repository.save(filmsSaved);
   }
 
-  findAll() {
-    return `This action returns all filmes`;
+  async findAll({ skip = 0 }) {
+    const take = 10;
+    const [result, total] = await this.repository.findAndCount({
+      order: { id: 'DESC' },
+      take,
+      skip,
+    });
+
+    return {
+      data: result,
+      count: total,
+    };
   }
 
   async findByIdRef(films: FilmsByApiFechingDto[]) {
@@ -56,10 +70,10 @@ export class FilmesService {
 
   private async fechingOnApi(): Promise<FilmsByApiFechingDto[]> {
     const apiResponse = await apiFilms
-      .get(`films?fields=${fiels}`)
+      .get(`films?fields=${fiels}&limit=50`)
       .then((response) => response.data)
       .catch(() => {
-        throw new BadRequestException('Api films is not work');
+        throw new ServiceUnavailableException('Api films is not work');
       });
 
     return apiResponse;
